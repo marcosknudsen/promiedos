@@ -22,7 +22,6 @@ export default async function (id) {
         }
       )
     );
-    response.shift();
     response=response.filter((n)=>n!=null)
     return response;
   } catch (e) {
