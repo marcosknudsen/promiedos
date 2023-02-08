@@ -14,7 +14,7 @@ export default async function (id) {
             day: e.children[0].innerText,
             against: e.children[3].innerText,
             matchN: e.children[1].innerText,
-            hoa: e.children[2].innerText=="H"?"H":"A",
+            hoa: e.children[2].innerText=="L"?"H":"A",
           };
           return obj;
         }
