@@ -6,7 +6,7 @@ export default async function (id) {
     const pagina = await navegador.newPage();
     let table;
     await pagina.goto(`https://www.promiedos.com.ar/club=${id}`);
-    let response = await pagina.evaluate(() =>
+    let matches = await pagina.evaluate(() =>
       Array.from(
         document.querySelector(".fixclub").children[0].children,
         function (e) {
@@ -22,8 +22,14 @@ export default async function (id) {
         }
       )
     );
-    response=response.filter((n)=>n!=null)
-    return response;
+    matches=matches.filter((n)=>n!=null)
+    let teamname=await pagina.evaluate(()=>
+        document.querySelector("strong").innerText
+    )
+    return {
+      teamname:teamname,
+      matches:matches
+    };
   } catch (e) {
     console.log(e);
   }
