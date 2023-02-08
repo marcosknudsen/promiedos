@@ -11,16 +11,16 @@ export default async function (id) {
         document.querySelector(".fixclub").children[0].children,
         function (e) {
           var obj = {
-            dia: e.children[0].innerText,
-            rival: e.children[3].innerText,
-            fecha: e.children[1].innerText,
-            lov: e.children[2].innerText,
+            day: e.children[0].innerText,
+            against: e.children[3].innerText,
+            matchN: e.children[1].innerText,
+            hoa: e.children[2].innerText=="H"?"H":"A",
           };
           return obj;
         }
       )
     )
-    let first = response.shift();
+    response.shift();
     return response;
   } catch (e) {
     console.log(e);
