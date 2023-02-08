@@ -22,13 +22,12 @@ export default async function (id) {
         }
       )
     );
-    matches=matches.filter((n)=>n!=null)
     let teamname=await pagina.evaluate(()=>
         document.querySelector("strong").innerText
     )
     return {
       teamname:teamname,
-      matches:matches
+      matches:matches.filter((n)=>n!=null)
     };
   } catch (e) {
     console.log(e);
