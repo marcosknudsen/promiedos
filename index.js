@@ -116,7 +116,7 @@ export async function getMatchesToday() {
           };
       })
         .sort((a, b) => {
-          return parseInt(a.time) - parseInt(b.time);
+          return parseInt(a.time.replace(":","")) - parseInt(b.time.replace(":",""));
         })
         .filter((d) => d != null)
     );
@@ -148,7 +148,7 @@ export async function getLiveMatches() {
         }
       )
         .sort((a, b) => {
-          return parseInt(a.time) - parseInt(b.time);
+          return parseInt(a.time.replace(":","")) - parseInt(b.time.replace(":",""));
         })
         .filter((d) => d != null)
     );
