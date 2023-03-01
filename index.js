@@ -38,19 +38,19 @@ export async function getTodayResults() {
     await pagina.goto("https://www.promiedos.com.ar/");
     let matches = await pagina.evaluate(() =>
       Array.from(
-        document.querySelectorAll("tr[name=nvp]"),
+        document.querySelectorAll("tr[name=nvp]:not(.goles):not(.choy)"),
         function (e) {
           if (e.children[0].classList[0] == "game-fin")
-          return {
-            localTeam:
-              e.children[1].children[e.children[1].children.length - 1]
-                .innerText,
-            localScore: e.children[2].innerText,
-            awayTeam:
-              e.children[4].children[e.children[4].children.length - 1]
-                .innerText,
-            awayScore: e.children[3].innerText,
-          };
+            return {
+              localTeam:
+                e.children[1].children[e.children[1].children.length - 1]
+                  .innerText,
+              localScore: e.children[2].innerText,
+              awayTeam:
+                e.children[4].children[e.children[4].children.length - 1]
+                  .innerText,
+              awayScore: e.children[3].innerText,
+            };
         }
       )
         .sort((a, b) => {
@@ -64,26 +64,26 @@ export async function getTodayResults() {
   }
 }
 
-export async function getYesterdayResults(){
+export async function getYesterdayResults() {
   try {
     const navegador = await puppeteer.launch();
     const pagina = await navegador.newPage();
     await pagina.goto("https://www.promiedos.com.ar/ayer");
     let matches = await pagina.evaluate(() =>
       Array.from(
-        document.querySelectorAll("tr[name=nvp]"),
+        document.querySelectorAll("tr[name=nvp]:not(.goles):not(.choy)"),
         function (e) {
           if (e.children[0].classList[0] == "game-fin")
-          return {
-            localTeam:
-              e.children[1].children[e.children[1].children.length - 1]
-                .innerText,
-            localScore: e.children[2].innerText,
-            awayTeam:
-              e.children[4].children[e.children[4].children.length - 1]
-                .innerText,
-            awayScore: e.children[3].innerText,
-          };
+            return {
+              localTeam:
+                e.children[1].children[e.children[1].children.length - 1]
+                  .innerText,
+              localScore: e.children[2].innerText,
+              awayTeam:
+                e.children[4].children[e.children[4].children.length - 1]
+                  .innerText,
+              awayScore: e.children[3].innerText,
+            };
         }
       )
         .sort((a, b) => {
@@ -103,20 +103,26 @@ export async function getMatchesToday() {
     const pagina = await navegador.newPage();
     await pagina.goto("https://www.promiedos.com.ar/");
     let matches = await pagina.evaluate(() =>
-      Array.from(document.querySelectorAll("tr[name=nvp]"), function (e) {
-        if (e.children[0].classList[0] == "game-time")
-          return {
-            time: e.children[0].innerText.replace(" ", ""),
-            localTeam:
-              e.children[1].children[e.children[1].children.length - 1]
-                .innerText,
-            awayTeam:
-              e.children[4].children[e.children[4].children.length - 1]
-                .innerText,
-          };
-      })
+      Array.from(
+        document.querySelectorAll("tr[name=nvp]:not(.goles):not(.choy)"),
+        function (e) {
+          if (e.children[0].classList[0] == "game-time")
+            return {
+              time: e.children[0].innerText.replace(" ", ""),
+              localTeam:
+                e.children[1].children[e.children[1].children.length - 1]
+                  .innerText,
+              awayTeam:
+                e.children[4].children[e.children[4].children.length - 1]
+                  .innerText,
+            };
+        }
+      )
         .sort((a, b) => {
-          return parseInt(a.time.replace(":","")) - parseInt(b.time.replace(":",""));
+          return (
+            parseInt(a.time.replace(":", "")) -
+            parseInt(b.time.replace(":", ""))
+          );
         })
         .filter((d) => d != null)
     );
@@ -125,6 +131,42 @@ export async function getMatchesToday() {
     console.log(e);
   }
 }
+
+export async function getTomorrowMatches() {
+  try {
+    const navegador = await puppeteer.launch();
+    const pagina = await navegador.newPage();
+    await pagina.goto("https://www.promiedos.com.ar/man");
+    let matches = await pagina.evaluate(() =>
+      Array.from(
+        document.querySelectorAll("tr[name=nvp]:not(.goles):not(.choy)"),
+        function (e) {
+          if (e.children[0].classList[0] == "game-time")
+            return {
+              time: e.children[0].innerText.replace(" ", ""),
+              localTeam:
+                e.children[1].children[e.children[1].children.length - 1]
+                  .innerText,
+              awayTeam:
+                e.children[4].children[e.children[4].children.length - 1]
+                  .innerText,
+            };
+        }
+      )
+        .sort((a, b) => {
+          return (
+            parseInt(a.time.replace(":", "")) -
+            parseInt(b.time.replace(":", ""))
+          );
+        })
+        .filter((d) => d != null)
+    );
+    return matches;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export async function getLiveMatches() {
   try {
     const navegador = await puppeteer.launch();
@@ -148,7 +190,10 @@ export async function getLiveMatches() {
         }
       )
         .sort((a, b) => {
-          return parseInt(a.time.replace(":","")) - parseInt(b.time.replace(":",""));
+          return (
+            parseInt(a.time.replace(":", "")) -
+            parseInt(b.time.replace(":", ""))
+          );
         })
         .filter((d) => d != null)
     );
